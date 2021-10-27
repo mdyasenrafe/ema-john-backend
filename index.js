@@ -23,7 +23,9 @@ async function run() {
     const productCollection = database.collection("products");
     const ordersCollection = database.collection("orders");
     // app.post("/products", async (req, res) => {});
-
+    app.get("/hello", async (req, res) => {
+      res.send("Hello Api");
+    });
     // get api
     app.get("/products", async (req, res) => {
       const cursor = productCollection.find({});
