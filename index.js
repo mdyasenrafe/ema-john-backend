@@ -20,6 +20,7 @@ async function run() {
     await client.connect();
     const database = client.db("emaJhon");
     const productCollection = database.collection("products");
+    const ordersCollection = database.collection("orders");
     // app.post("/products", async (req, res) => {});
 
     // get api
@@ -31,7 +32,7 @@ async function run() {
 
       let products;
       if (page) {
-        console.log(page * size, size, page);
+        // console.log(page * size, size, page);
         products = await cursor
           .skip(page * size)
           .limit(size)
@@ -45,6 +46,18 @@ async function run() {
       });
     });
 
+    app.post("/products/byKeys", async (req, res) => {
+      const keys = req.body;
+      const query = { key: { $in: keys } };
+      const products = await productCollection.find(query).toArray();
+      res.send(products);
+    });
+    // add order api
+    app.post("/orders", async (req, res) => {
+      const order = req.body;
+      const resutl = await ordersCollection.insertOne(order);
+      res.send(resutl);
+    });
     console.log("database connect");
   } finally {
   }
